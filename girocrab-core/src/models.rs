@@ -658,6 +658,11 @@ pub struct BookingFilter {
     #[uniffi(default)]
     #[cfg_attr(feature = "serde", serde(default))]
     pub respect_in_total: bool,
+    /// Only bookings without a document: neither a stored file nor a linked
+    /// receipt (#590).
+    #[uniffi(default)]
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub without_document: bool,
 }
 
 /// Serde default of [`Account::include_in_total`].
