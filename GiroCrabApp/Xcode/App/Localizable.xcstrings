@@ -24509,6 +24509,17 @@
         }
       }
     },
+    "Nur ohne Beleg" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Only Without Receipt"
+          }
+        }
+      }
+    },
     "Nur ohne Buchung" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -24692,6 +24703,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No Bank"
+          }
+        }
+      }
+    },
+    "Ohne Beleg" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Receipt"
           }
         }
       }

@@ -362,6 +362,7 @@ struct MerchantFocusReturn {
     let direction: BookingDirection
     let search: String
     let tags: BookingTagFilter
+    var missingDocumentOnly = false
 }
 
 /// Tag filter of the booking list (#228): bookings carrying every tag in `tagIDs`,
@@ -699,6 +700,7 @@ extension BookingFilter {
         scope == .all && direction == .all && checked == nil && search == nil && categoryId == nil && !uncategorizedOnly
             && tagIds.isEmpty && !untaggedOnly
             && amountMinCents == nil && amountMaxCents == nil
+            && !withoutDocument
     }
 }
 

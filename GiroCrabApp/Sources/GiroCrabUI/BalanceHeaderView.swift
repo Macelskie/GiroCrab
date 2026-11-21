@@ -443,6 +443,10 @@ struct StreamHeaderCard: View {
                         .pickerStyle(.inline)
                         .labelsHidden()
                     }
+                    // which bookings still lack a receipt (#590)
+                    Section("Belege") {
+                        Toggle("Nur ohne Beleg", isOn: $model.missingDocumentOnly)
+                    }
                     if model.showsSubcategoryFilter {
                         Section {
                             Toggle("Unterkategorien einbeziehen", isOn: $model.interactiveIncludeSubcategories)

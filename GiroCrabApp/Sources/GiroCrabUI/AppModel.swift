@@ -369,6 +369,7 @@ public final class AppModel {
     /// Any list filter of the header row narrows the list.
     var hasActiveListFilters: Bool {
         statusFilter != .all || directionFilter != .all || tagFilter.isActive || amountFilter.isActive
+            || missingDocumentOnly
             || !searchText.isEmpty || !categoryAccountIDs.isEmpty || excludesSubcategories
     }
 
@@ -382,6 +383,7 @@ public final class AppModel {
             includeSubcategories = true
             clearTagFilter()
             amountFilter = AmountFilter()
+            missingDocumentOnly = false
             categoryAccountFilter = []
             searchText = ""
             searchTask?.cancel()
@@ -392,16 +394,32 @@ public final class AppModel {
     /// Set while `resetListFilters` changes several filters: their own reloads are skipped.
     @ObservationIgnored var suspendsFilterReloads = false
 
+    /// Only bookings without a document, neither a stored file nor a linked
+    /// receipt (#590); filtered in the core like status and direction.
+    var missingDocumentOnly = false {
+        didSet {
+            guard missingDocumentOnly != oldValue, !suspendsFilterReloads else { return }
+            listLimit = Self.defaultListLimit
+            reloadAfterFilterChange()
+        }
+    }
+
     /// Label of the header filter menu: "Status: Alle" or the active filters.
     var filterTitle: String {
-        guard directionFilter != .all else { return String(localized: "Status: \(statusFilter.title)") }
-        let kind = directionFilter == .income ? String(localized: "Einnahmen") : String(localized: "Ausgaben")
-        return statusFilter == .all ? kind : "\(statusFilter.title) · \(kind)"
+        var parts: [String] = []
+        if statusFilter != .all { parts.append(statusFilter.title) }
+        if directionFilter != .all {
+            parts.append(directionFilter == .income ? String(localized: "Einnahmen") : String(localized: "Ausgaben"))
+        }
+        if missingDocumentOnly { parts.append(String(localized: "Ohne Beleg")) }
+        guard !parts.isEmpty else { return String(localized: "Status: \(statusFilter.title)") }
+        if parts.count == 1, statusFilter != .all { return String(localized: "Status: \(statusFilter.title)") }
+        return parts.joined(separator: " · ")
     }
 
     /// Filled icon while any filter is active.
     var filterSymbol: String {
-        statusFilter == .all && directionFilter == .all && !excludesSubcategories
+        statusFilter == .all && directionFilter == .all && !excludesSubcategories && !missingDocumentOnly
             ? "line.3.horizontal.decrease" : "line.3.horizontal.decrease.circle.fill"
     }
     /// Income / expenses only (GitHub #53); filtered in the core, so totals and CSV follow.

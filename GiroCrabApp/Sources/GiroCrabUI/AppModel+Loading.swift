@@ -447,7 +447,8 @@ extension AppModel {
             // Overall money contexts (#337) — overview, kind / bank / user
             // group, also with exactly one account — sum the effective total
             // set; single account, category and proof views keep their sums.
-            respectInTotal: sidebarSelection?.usesTotalsContext ?? true
+            respectInTotal: sidebarSelection?.usesTotalsContext ?? true,
+            withoutDocument: missingDocumentOnly
         )
     }
 
